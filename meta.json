@@ -1,0 +1,15 @@
+{
+  "guid": "3c8f5e21-7d4a-4f9b-bc18-a02e6f1d4c95",
+  "name": "Music Uploader",
+  "description": "Upload music to the library from the Jellyfin web UI.",
+  "overview": "Adds an Add Music button to the music library. Drop folders (Artist/Album/Songs) into a small window and the plugin saves them under the configured music library path and triggers a refresh.",
+  "owner": "self-hosted",
+  "category": "Library",
+  "version": "0.1.0.0",
+  "targetAbi": "10.11.0.0",
+  "framework": "net9.0",
+  "assemblies": ["JellyMusicUploader.dll"],
+  "status": "Active",
+  "autoUpdate": false,
+  "imagePath": "thumb.png"
+}

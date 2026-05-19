@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Music Uploader</title>
+</head>
+<body>
+  <div id="MusicUploaderConfigPage"
+       data-role="page"
+       class="page type-interior pluginConfigurationPage"
+       data-require="emby-input,emby-button,emby-checkbox">
+    <div data-role="content">
+      <div class="content-primary">
+        <form id="MusicUploaderConfigForm" style="margin: 0 auto; max-width: 720px;">
+          <h2 style="margin-top: 1.5em;">Music Uploader</h2>
+          <p style="color:#aaa; max-width: 60ch;">
+            Uploaded folders (Artist / Album / Songs) are written under
+            <b>Library Path</b>. After a batch finishes, Jellyfin's library
+            scan runs so the new tracks show up.
+          </p>
+          <p style="color:#aaa; max-width: 60ch;">
+            The web-UI button is loaded via a script tag — paste this into
+            <i>Dashboard → General → Branding → Custom CSS</i>:
+            <code style="display:block; padding:8px; background:#111; border-radius:4px; margin-top:6px;">
+              &lt;script src="/musicup/frontend/js/uploader.js" defer&gt;&lt;/script&gt;
+            </code>
+            An <b>Add Music</b> button then appears in the bottom-right for
+            admin users.
+          </p>
+
+          <div class="inputContainer">
+            <label class="inputLabel inputLabelUnfocused" for="LibraryPath">Library Path</label>
+            <input is="emby-input" id="LibraryPath" name="LibraryPath" type="text" />
+            <div class="fieldDescription">Absolute path on the server. Must already exist and be writable by Jellyfin.</div>
+          </div>
+
+          <div class="inputContainer">
+            <label class="inputLabel inputLabelUnfocused" for="MaxFileSizeMb">Max File Size (MB)</label>
+            <input is="emby-input" id="MaxFileSizeMb" name="MaxFileSizeMb" type="number" min="0" />
+            <div class="fieldDescription">0 disables the cap.</div>
+          </div>
+
+          <div class="inputContainer">
+            <label class="inputLabel inputLabelUnfocused" for="AllowedExtensions">Allowed Extensions</label>
+            <input is="emby-input" id="AllowedExtensions" name="AllowedExtensions" type="text" />
+            <div class="fieldDescription">Comma-separated, lowercase, no leading dot.</div>
+          </div>
+
+          <label class="checkboxContainer">
+            <input is="emby-checkbox" type="checkbox" id="RefreshLibraryOnComplete" />
+            <span>Trigger library scan after each batch</span>
+          </label>
+
+          <label class="checkboxContainer">
+            <input is="emby-checkbox" type="checkbox" id="AllowOverwrite" />
+            <span>Allow overwriting existing files</span>
+          </label>
+
+          <label class="checkboxContainer">
+            <input is="emby-checkbox" type="checkbox" id="NormalizeTagsFromFolder" />
+            <span>Set Artist/Album/Title tags from the folder structure (recommended)</span>
+          </label>
+
+          <div>
+            <button is="emby-button" type="submit" class="raised button-submit block">
+              <span>Save</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      (function () {
+        var PLUGIN_ID = '3c8f5e21-7d4a-4f9b-bc18-a02e6f1d4c95';
+
+        function loadConfig(page) {
+          ApiClient.getPluginConfiguration(PLUGIN_ID).then(function (cfg) {
+            page.querySelector('#LibraryPath').value = cfg.LibraryPath || '';
+            page.querySelector('#MaxFileSizeMb').value = cfg.MaxFileSizeMb != null ? cfg.MaxFileSizeMb : 200;
+            page.querySelector('#AllowedExtensions').value = cfg.AllowedExtensions || '';
+            page.querySelector('#RefreshLibraryOnComplete').checked = !!cfg.RefreshLibraryOnComplete;
+            page.querySelector('#AllowOverwrite').checked = !!cfg.AllowOverwrite;
+            page.querySelector('#NormalizeTagsFromFolder').checked = cfg.NormalizeTagsFromFolder !== false;
+            Dashboard.hideLoadingMsg();
+          });
+        }
+
+        function saveConfig(page, e) {
+          e.preventDefault();
+          Dashboard.showLoadingMsg();
+          ApiClient.getPluginConfiguration(PLUGIN_ID).then(function (cfg) {
+            cfg.LibraryPath = page.querySelector('#LibraryPath').value.trim();
+            cfg.MaxFileSizeMb = parseInt(page.querySelector('#MaxFileSizeMb').value, 10) || 0;
+            cfg.AllowedExtensions = page.querySelector('#AllowedExtensions').value.trim();
+            cfg.RefreshLibraryOnComplete = page.querySelector('#RefreshLibraryOnComplete').checked;
+            cfg.AllowOverwrite = page.querySelector('#AllowOverwrite').checked;
+            cfg.NormalizeTagsFromFolder = page.querySelector('#NormalizeTagsFromFolder').checked;
+            ApiClient.updatePluginConfiguration(PLUGIN_ID, cfg).then(function (r) {
+              Dashboard.processPluginConfigurationUpdateResult(r);
+            });
+          });
+          return false;
+        }
+
+        document.querySelector('#MusicUploaderConfigPage')
+          .addEventListener('pageshow', function () {
+            Dashboard.showLoadingMsg();
+            loadConfig(this);
+          });
+        document.querySelector('#MusicUploaderConfigForm')
+          .addEventListener('submit', function (e) {
+            return saveConfig(this.closest('#MusicUploaderConfigPage'), e);
+          });
+      })();
+    </script>
+  </div>
+</body>
+</html>
