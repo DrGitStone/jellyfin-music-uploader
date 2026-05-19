@@ -449,12 +449,3 @@ attach it to a Release automatically.
 
 MIT — see [LICENSE](LICENSE).
 
-## Contributing
-
-Issues and pull requests welcome. Easy ways to help:
-
-- Better error messages in the modal when uploads fail
-- Per-track artwork embedding (TagLibSharp is the usual choice)
-- Scoped library scan (music library only, not the whole server)
-- Resume / retry on transient failures
-- A real screenshot for the README
