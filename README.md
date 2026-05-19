@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="logo-circle.png" alt="Jellyfin Music Uploader" width="160" height="160">
+  <img src="logo-circle.png" alt="JellyMusicUploader" width="160" height="160">
 </p>
 
 <h1 align="center">Jellyfin Music Uploader</h1>
