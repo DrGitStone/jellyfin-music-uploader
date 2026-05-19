@@ -1,3 +1,4 @@
+
 <p align="center">
   <img src="logo-circle.png" alt="Jellyfin Music Uploader" width="160" height="160">
 </p>
@@ -49,6 +50,11 @@ import dance. Just drag a folder into the browser.
   upload endpoint rejects non-admin tokens
 - Path-traversal hardened, extension allowlist, per-file size cap
 - One small DLL — no extra runtime deps to ship with it
+
+<img width="1412" height="1010" alt="Screenshot 2026-05-19 at 12 48 55 PM" src="https://github.com/user-attachments/assets/dfc5de2c-38b1-4e05-9ef5-52180cbb12f6" />
+
+<img width="767" height="393" alt="Screenshot 2026-05-19 at 12 49 40 PM" src="https://github.com/user-attachments/assets/7bd67c4f-8fa9-486e-9593-7cafd4b12fa7" />
+
 
 ## Requirements
 
